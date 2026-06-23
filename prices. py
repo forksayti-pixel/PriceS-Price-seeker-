@@ -1,0 +1,217 @@
+from pyfiglet import figlet_format
+import urllib.parse
+import webbrowser
+import os
+import sys
+
+# ================= LOGO =================
+try:
+    print(figlet_format("PriceS"))
+except:
+    print("===== PriceS =====")
+
+# ================= SAFE OPEN =================
+def open_link(url):
+    try:
+        if os.system("command -v termux-open-url > /dev/null") == 0:
+            os.system(f"termux-open-url '{url}'")
+        else:
+            webbrowser.open_new_tab(url)
+    except:
+        print("Can't open link")
+
+# ================= LANGUAGE =================
+T = {
+    "1": {
+        "lang": "Select language",
+        "region": "Select region",
+        "product": "Enter product name",
+        "search": "Searching...",
+        "open": "Open link number? (Enter = exit)",
+        "error": "Wrong number",
+        "exit": "Press Enter to exit",
+
+        "regions": [
+            "Ukraine", "Kazakhstan", "CIS", "Europe",
+            "North America", "South America", "Africa", "China"
+        ]
+    },
+    "2": {
+        "lang": "选择语言",
+        "region": "选择地区",
+        "product": "输入商品名称",
+        "search": "搜索中...",
+        "open": "输入要打开的编号 (回车退出)",
+        "error": "编号错误",
+        "exit": "按回车退出",
+
+        "regions": [
+            "乌克兰", "哈萨克斯坦", "独联体", "欧洲",
+            "北美", "南美", "非洲", "中国"
+        ]
+    },
+    "3": {
+        "lang": "Оберіть мову",
+        "region": "Оберіть регіон",
+        "product": "Введіть назву товару",
+        "search": "Пошук...",
+        "open": "Відкрити номер? (Enter = вихід)",
+        "error": "Невірний номер",
+        "exit": "Натисніть Enter",
+
+        "regions": [
+            "Україна", "Казахстан", "СНД", "Європа",
+            "Північна Америка", "Південна Америка", "Африка", "Китай"
+        ]
+    },
+    "4": {
+        "lang": "Выберите язык",
+        "region": "Выберите регион",
+        "product": "Введите товар",
+        "search": "Поиск...",
+        "open": "Открыть номер? (Enter = выход)",
+        "error": "Неверный номер",
+        "exit": "Нажмите Enter",
+
+        "regions": [
+            "Украина", "Казахстан", "СНГ", "Европа",
+            "Северная Америка", "Южная Америка", "Африка", "Китай"
+        ]
+    },
+    "5": {
+        "lang": "Selecionar idioma",
+        "region": "Selecionar região",
+        "product": "Digite o produto",
+        "search": "Buscando...",
+        "open": "Abrir número? (Enter = sair)",
+        "error": "Número inválido",
+        "exit": "Pressione Enter",
+
+        "regions": [
+            "Ucrânia", "Cazaquistão", "CEI", "Europa",
+            "América do Norte", "América do Sul", "África", "China"
+        ]
+    }
+}
+
+# ================= LANGUAGE =================
+print("""
+1. English
+2. 中文
+3. Українська
+4. Русский
+5. Português (Brasil)
+""")
+
+lang = input("> ")
+t = T.get(lang, T["1"])
+
+# ================= REGION =================
+print("\n" + t["region"])
+
+regions = t["regions"]
+
+for i, r in enumerate(regions, 1):
+    print(f"{i}. {r}")
+
+region = input("> ")
+
+# ================= PRODUCT =================
+print("\n" + t["product"])
+product = input("> ")
+
+# ================= LINKS =================
+def get_links(product, region):
+    p = urllib.parse.quote(product)
+
+    if region == "1":
+        return [
+            f"https://rozetka.com.ua/search/?text={p}",
+            f"https://prom.ua/ua/search?search_term={p}",
+            f"https://www.olx.ua/uk/list/q-{p}"
+        ]
+
+    elif region == "2":
+        return [
+            f"https://kaspi.kz/shop/search/?text={p}",
+            f"https://satu.kz/search?search_term={p}",
+            f"https://market.kz/search?query={p}",
+            f"https://www.ozon.ru/search/?text={p}"
+        ]
+
+    elif region == "3":
+        return [
+            f"https://www.wildberries.ru/catalog/0/search.aspx?search={p}",
+            f"https://www.ozon.ru/search/?text={p}",
+            f"https://aliexpress.com/wholesale?SearchText={p}"
+        ]
+
+    elif region == "4":
+        return [
+            f"https://www.amazon.com/s?k={p}",
+            f"https://www.ebay.com/sch/i.html?_nkw={p}",
+            f"https://allegro.pl/listing?string={p}",
+            f"https://www.idealo.com/search/?q={p}"
+        ]
+
+    elif region == "5":
+        return [
+            f"https://www.amazon.com/s?k={p}",
+            f"https://www.ebay.com/sch/i.html?_nkw={p}",
+            f"https://www.walmart.com/search?q={p}",
+            f"https://www.bestbuy.com/site/searchpage.jsp?st={p}"
+        ]
+
+    elif region == "6":
+        return [
+            f"https://listado.mercadolibre.com/{p}",
+            f"https://www.amazon.com/s?k={p}"
+        ]
+
+    elif region == "7":
+        return [
+            f"https://www.jumia.com.ng/catalog/?q={p}",
+            f"https://aliexpress.com/wholesale?SearchText={p}"
+        ]
+
+    elif region == "8":
+        return [
+            f"https://s.taobao.com/search?q={p}",
+            f"https://search.jd.com/Search?keyword={p}",
+            f"https://www.tmall.com/search?q={p}",
+            f"https://mobile.yangkeduo.com/search_result.html?search_key={p}"
+        ]
+
+    return []
+
+# ================= SEARCH =================
+print("\n" + t["search"])
+
+links = get_links(product, region)
+
+# ================= SHOW LINKS =================
+for i, link in enumerate(links, 1):
+    print(f"{i}. {link}")
+
+# ================= LOOP =================
+while True:
+    print("\n" + t["open"])
+    choice = input("> ")
+
+    if choice == "":
+        break
+
+    if choice.isdigit():
+        choice = int(choice)
+
+        if 1 <= choice <= len(links):
+            open_link(links[choice - 1])
+        else:
+            print("\n" + t["error"])
+    else:
+        print("\n" + t["error"])
+
+# ================= EXIT =================
+input("\n" + t["exit"])
+
+print("\nBy @Not3Rey")
